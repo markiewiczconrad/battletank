@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ConradCo
 
 #pragma once
 
@@ -7,6 +7,14 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankAimingComponent.generated.h"
+
+UENUM()
+enum class EFiringStatus : uint8
+{
+	RELOADING,
+	AIMING,
+	LOCKED
+};
 
 class UTankBarrel;
 class UTankTurret;
@@ -27,6 +35,8 @@ public:
 	void SetTurretReference(UTankTurret *TurretToSet);
 
 protected:
+	UPROPERTY( BlueprintReadOnly , Category = "State")
+	EFiringStatus FiringState = EFiringStatus::RELOADING;
 
 private:	
 	bool bWantsBeginPlay;

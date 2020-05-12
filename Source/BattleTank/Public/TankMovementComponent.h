@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ConradCo
 
 #pragma once
 
@@ -23,6 +23,7 @@ public:
 	UFUNCTION( BlueprintCallable, Category = Setup )
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
+	//Called by pathfinding logic
 	void RequestDirectMove(const FVector & MoveVelocity,bool bForceMaxSpeed) override;
 
 private:

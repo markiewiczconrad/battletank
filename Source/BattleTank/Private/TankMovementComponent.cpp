@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ConradCo
 
 
 #include "TankMovementComponent.h"
@@ -12,7 +12,6 @@ void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* 
 
 void UTankMovementComponent::IntendMove(float Throw) {
     if (!LeftTrack || !RightTrack) return;
-    UE_LOG(LogTemp, Warning, TEXT("%f"), Throw);
     LeftTrack->SetThrottle(Throw);
     RightTrack->SetThrottle(Throw);
 }
@@ -24,12 +23,11 @@ void UTankMovementComponent::IntendRotate(float Throw) {
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity,bool bForceMaxSpeed) {
-    auto Owner = GetOwner()->GetName();
     auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
     auto AIForwardIntention = MoveVelocity.GetSafeNormal();
     auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
+    auto RotateThrow = FVector::CrossProduct(TankForward, AIForwardIntention);
 
-    UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *Owner, *AIForwardIntention.ToString());
-
-    IntendMove(ForwardThrow);
+    this->IntendMove(ForwardThrow);
+    this->IntendRotate(1.5 * RotateThrow.Z);
 }

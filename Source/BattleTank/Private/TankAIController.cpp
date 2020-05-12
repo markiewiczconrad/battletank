@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ConradCo
 
 #include "Tank.h"
 #include "TankAIController.h"
@@ -28,17 +28,19 @@ void ATankAIController::BeginPlay() {
 }
 
 void ATankAIController::Tick(float DeltaTime) {
-    Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 
-    auto* owner = Cast<ATank>(GetPawn());
+	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto ControlledTank = Cast<ATank>(GetPawn());
 
-    auto* player = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-    if (player) {
+	if (PlayerTank)
+	{
+		// Move towards the player
+		MoveToActor(PlayerTank, AcceptanceRadius); // TODO check radius is in cm
 
-        MoveToActor(player, AcceptanceRadius);
+		// Aim towards the player
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 
-        owner->AimAt(player->GetActorLocation());
-
-        owner->Fire();
-    }
+		//ControlledTank->Fire(); // TODO limit firing rate
+	}
 }
